@@ -3,15 +3,19 @@ import db from "../mockdb/index.js";
 
 const router = express.Router();
 
-router.get("/:id?", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
+  try {
+    const data = await db.getAll();
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    let data;
-    if (id) {
-      data = await db.getOne(id);
-    } else {
-      data = await db.getAll();
-    }
+    const data = await db.getOne(id);
     res.json(data);
   } catch (error) {
     next(error);
